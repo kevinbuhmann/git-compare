@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "GitCompare": {
+      "commandName": "Project",
+      "commandLineArgs": "C:\\GitHub\\"
+    }
+  }
+}
