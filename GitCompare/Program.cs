@@ -22,16 +22,26 @@ namespace GitCompare
                     Console.Title = ApplicationName;
                 }
 
-                IEnumerable<string> repoFolders = FindRepos(directory);
-                IEnumerable<RepoInfo> repos = CompareReps(directory, repoFolders);
-                IEnumerable<IGrouping<RepoStatusFlags, RepoInfo>> groups = SortRepos(repos);
-                OutputRepos(groups);
+                ConsoleKey key = ConsoleKey.Enter;
 
-                if (Console.Title == ApplicationName)
+                do
                 {
-                    Console.Write("Press any key to exit...");
-                    Console.ReadKey();
-                }
+                    if (Console.Title == ApplicationName)
+                    {
+                        Console.Clear();
+                    }
+
+                    IEnumerable<string> repoFolders = FindRepos(directory);
+                    IEnumerable<RepoInfo> repos = CompareReps(directory, repoFolders);
+                    IEnumerable<IGrouping<RepoStatusFlags, RepoInfo>> groups = SortRepos(repos);
+                    OutputRepos(groups);
+
+                    if (Console.Title == ApplicationName)
+                    {
+                        Console.Write("Press enter to run again or any other key to exit...");
+                        key = Console.ReadKey().Key;
+                    }
+                } while (Console.Title == ApplicationName && key == ConsoleKey.Enter);
             }
         }
 
