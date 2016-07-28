@@ -2,14 +2,22 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace GitCompare
 {
     public static class Program
     {
+        public static string ApplicationName = "Git Compare";
+
         public static void Main(string[] args)
         {
+            if (Console.Title == Assembly.GetEntryAssembly().Location)
+            {
+                Console.Title = ApplicationName;
+            }
+
             string directory = GetDirectory(args);
 
             if (directory != null)
@@ -18,6 +26,12 @@ namespace GitCompare
                 IEnumerable<RepoInfo> repos = CompareReps(directory, repoFolders);
                 IEnumerable<IGrouping<RepoStatusFlags, RepoInfo>> groups = SortRepos(repos);
                 OutputRepos(groups);
+            }
+
+            if (Console.Title == ApplicationName)
+            {
+                Console.Write("Press any key to exit...");
+                Console.ReadKey();
             }
         }
 
