@@ -1,10 +1,8 @@
-language: csharp
+language: generic
 sudo: required
 os:
   - linux
 dist: trusty
-mono:
-  - 4.2.3
 env:
   - CLI_VERSION=latest
 addons:
