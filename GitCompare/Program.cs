@@ -18,6 +18,7 @@ namespace GitCompare
             }
 
             string folder = args[0];
+            folder = folder.EndsWith(@"\") ? folder : $@"{folder}\";
 
             if (!Directory.Exists(folder))
             {
