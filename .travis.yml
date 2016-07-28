@@ -15,6 +15,7 @@ addons:
     - libicu-dev
     - libssl-dev
     - zlib1g
+    - libunwind-dev
 branches:  
   only:
     - master

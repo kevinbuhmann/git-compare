@@ -16,14 +16,7 @@ namespace GitCompare
             if (folder != null)
             {
                 IEnumerable<string> repoFolders = FindRepos(folder);
-
-                DateTime start = DateTime.Now;
-
                 IEnumerable<RepoInfo> repos = CompareReps(folder, repoFolders);
-
-                DateTime end = DateTime.Now;
-                Console.WriteLine($"{(end - start).TotalSeconds} seconds");
-
                 IEnumerable<IGrouping<RepoStatusFlags, RepoInfo>> groups = SortRepos(repos);
                 OutputRepos(groups);
             }
