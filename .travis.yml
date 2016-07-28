@@ -16,7 +16,6 @@ addons:
     - libssl-dev
     - zlib1g
     - libunwind8
-    - libunwind-dev
 branches:
   only:
     - master
