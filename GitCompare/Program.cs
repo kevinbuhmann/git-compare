@@ -54,7 +54,7 @@ namespace GitCompare
             {
                 Console.WriteLine(group.Key.ToStatusString());
 
-                foreach (RepoInfo repo in group)
+                foreach (RepoInfo repo in group.OrderBy(r => r.Name))
                 {
                     Console.WriteLine($"   {repo.Name}");
                 }
