@@ -13,25 +13,25 @@ namespace GitCompare
 
         public static void Main(string[] args)
         {
-            if (Console.Title == Assembly.GetEntryAssembly().Location)
-            {
-                Console.Title = ApplicationName;
-            }
-
             string directory = GetDirectory(args);
 
             if (directory != null)
             {
+                if (Console.Title == Assembly.GetEntryAssembly().Location)
+                {
+                    Console.Title = ApplicationName;
+                }
+
                 IEnumerable<string> repoFolders = FindRepos(directory);
                 IEnumerable<RepoInfo> repos = CompareReps(directory, repoFolders);
                 IEnumerable<IGrouping<RepoStatusFlags, RepoInfo>> groups = SortRepos(repos);
                 OutputRepos(groups);
-            }
 
-            if (Console.Title == ApplicationName)
-            {
-                Console.Write("Press any key to exit...");
-                Console.ReadKey();
+                if (Console.Title == ApplicationName)
+                {
+                    Console.Write("Press any key to exit...");
+                    Console.ReadKey();
+                }
             }
         }
 
