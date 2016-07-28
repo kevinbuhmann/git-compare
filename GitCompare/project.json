@@ -3,8 +3,13 @@
   "buildOptions": {
     "emitEntryPoint": true
   },
-  "dependencies": { },
+  "dependencies": {
+    "Microsoft.NETCore.App": {
+      "type": "platform",
+      "version": "1.0.0-rc2-3002702"
+    }
+  },
   "frameworks": {
-    "net451": { }
+    "netcoreapp1.0": { }
   }
 }
