@@ -5,7 +5,7 @@ before_build:
 build:
   verbosity: minimal
 artifacts:
-- path: GitCompare\bin\Debug\netcoreapp1.0\GitCompare.dll
+- path: GitCompare\bin\Release\netcoreapp1.0\GitCompare.dll
   name: GitCompare
 deploy:
 - provider: GitHub
