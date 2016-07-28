@@ -10,38 +10,40 @@ namespace GitCompare
     {
         public static void Main(string[] args)
         {
-            string folder = GetFolder(args);
+            string directory = GetDirectory(args);
 
-            if (folder != null)
+            if (directory != null)
             {
-                IEnumerable<string> repoFolders = FindRepos(folder);
-                IEnumerable<RepoInfo> repos = CompareReps(folder, repoFolders);
+                IEnumerable<string> repoFolders = FindRepos(directory);
+                IEnumerable<RepoInfo> repos = CompareReps(directory, repoFolders);
                 IEnumerable<IGrouping<RepoStatusFlags, RepoInfo>> groups = SortRepos(repos);
                 OutputRepos(groups);
             }
         }
 
-        private static string GetFolder(string[] args)
+        private static string GetDirectory(string[] args)
         {
-            string folder = null;
+            string directory = Directory.GetCurrentDirectory();
 
             if (args.Length == 1)
             {
-                folder = args[0];
-                folder = folder.EndsWith(@"\") ? folder : $@"{folder}\";
+                directory = args[0];
 
-                if (!Directory.Exists(folder))
+                if (!Directory.Exists(directory))
                 {
-                    folder = null;
-                    Console.WriteLine($"ERROR: Specified folder {folder} does not exist.");
+                    Console.WriteLine($"ERROR: Specified directory '{directory}' does not exist.");
+                    directory = null;
                 }
             }
-            else
+            else if (args.Length > 1)
             {
-                Console.WriteLine("ERROR: Must specify exactly one argument with is the folder in which to find git repos.");
+                Console.WriteLine("ERROR: Multiple arguments passed. Specify one argument which is the directory in which to find git repos; otherwise no arguments to use the current working directory.");
+                directory = null;
             }
+            
+            directory = directory == null || directory.EndsWith(@"\") ? directory : $@"{directory}\";
 
-            return folder;
+            return directory;
         }
 
         private static IEnumerable<string> FindRepos(string folder)
