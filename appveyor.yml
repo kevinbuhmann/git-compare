@@ -12,3 +12,5 @@ deploy:
   auth_token:
     secure: 6VCq6CyuBTcOI2AqzYwHAQXyrMg7CAETuLsGvfiSGQu8QXdjdO5Lu5l2wbF1lQ24
   artifact: GitCompare
+  on:
+    appveyor_repo_tag: true
