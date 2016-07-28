@@ -40,56 +40,41 @@ namespace GitCompare
 
         public static RepoStatusFlags GetRepoStatus(string repoFolder)
         {
-            RepoStatusFlags status = RepoStatusFlags.CleanAndUpToDate;
+            string status = ExecuteGitCommand(repoFolder, "status");
+            bool hasUncommittedChanges = status.Contains("nothing to commit") == false;
+            
+            ExecuteGitCommand(repoFolder, "fetch");
+            string branch = GetCurrentBranch(repoFolder);
 
-            if (HasUncommittedChanges(repoFolder))
+            string incomingLog = ExecuteGitCommand(repoFolder, $"log ..origin/{branch}").Trim();
+            bool hasIncomingChanges = string.IsNullOrEmpty(incomingLog) == false;
+
+            string outgoingLog = ExecuteGitCommand(repoFolder, $"log origin/{branch}..").Trim();
+            bool hasOutgoingChanges = string.IsNullOrEmpty(outgoingLog) == false;
+
+            RepoStatusFlags repoStatus = RepoStatusFlags.CleanAndUpToDate;
+
+            if (hasUncommittedChanges)
             {
-                status |= RepoStatusFlags.UncommittedChanges;
+                repoStatus |= RepoStatusFlags.UncommittedChanges;
             }
 
-            if (HasIncomingChanges(repoFolder))
+            if (hasIncomingChanges)
             {
-                status |= RepoStatusFlags.IncomingChanges;
+                repoStatus |= RepoStatusFlags.IncomingChanges;
             }
 
-            if (HasOutgoingChanges(repoFolder))
+            if (hasOutgoingChanges)
             {
-                status |= RepoStatusFlags.OutgoingChanges;
+                repoStatus |= RepoStatusFlags.OutgoingChanges;
             }
 
-            return status;
+            return repoStatus;
         }
 
         private static bool IsGitRepo(string folder)
         {
             return Directory.Exists(Path.Combine(folder, ".git"));
-        }
-
-        private static bool HasUncommittedChanges(string repoFolder)
-        {
-            string status = ExecuteGitCommand(repoFolder, "status");
-
-            return status.Contains("nothing to commit") == false;
-        }
-
-        private static bool HasIncomingChanges(string repoFolder)
-        {
-            ExecuteGitCommand(repoFolder, "fetch");
-
-            string branch = GetCurrentBranch(repoFolder);
-
-            string log = ExecuteGitCommand(repoFolder, $"log ..origin/{branch}").Trim();
-            return string.IsNullOrEmpty(log) == false;
-        }
-
-        private static bool HasOutgoingChanges(string repoFolder)
-        {
-            ExecuteGitCommand(repoFolder, "fetch");
-
-            string branch = GetCurrentBranch(repoFolder);
-
-            string log = ExecuteGitCommand(repoFolder, $"log origin/{branch}..").Trim();
-            return string.IsNullOrEmpty(log) == false;
         }
 
         private static string ExecuteGitCommand(string repoFolder, string arguments)
