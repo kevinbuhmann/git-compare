@@ -17,8 +17,17 @@ namespace GitCompare
             }
             else
             {
-                string[] subFolders = Directory.GetDirectories(folder);
-                repoFolders.AddRange(subFolders.SelectMany(subFolder => FindGitRepoFolders(subFolder)));
+                string[] subFolders = new string[] { };
+                try
+                {
+                    subFolders = Directory.GetDirectories(folder);
+                }
+                catch { }
+
+                if (subFolders.Any())
+                {
+                    repoFolders.AddRange(subFolders.SelectMany(subFolder => FindGitRepoFolders(subFolder)));
+                }
             }
 
             return repoFolders.ToArray();

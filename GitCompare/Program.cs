@@ -11,7 +11,19 @@ namespace GitCompare
     {
         public static void Main(string[] args)
         {
+            if (args.Length != 1)
+            {
+                Console.WriteLine("ERROR: Must specify exactly one argument with is the folder in which to find git repos.");
+                return;
+            }
+
             string folder = args[0];
+
+            if (!Directory.Exists(folder))
+            {
+                Console.WriteLine($"ERROR: Specified folder {folder} does not exist.");
+                return;
+            }
 
             Console.WriteLine($"Finding repos in {folder}...");
             IEnumerable<string> repoFolders = GitUtility.FindGitRepoFolders(folder);
