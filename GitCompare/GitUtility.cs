@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -35,7 +36,12 @@ namespace GitCompare
 
         public static string GetCurrentBranch(string repoFolder)
         {
-            return ExecuteGitCommand(repoFolder, "branch").Trim().RemoveLeadingStar().Trim();
+            return ExecuteGitCommand(repoFolder, "branch")
+                .Split(new string[] { "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries)
+                .Where(line => line.StartsWith("*"))
+                .First()
+                .RemoveLeadingStar()
+                .Trim();
         }
 
         public static RepoStatusFlags GetRepoStatus(string repoFolder)
