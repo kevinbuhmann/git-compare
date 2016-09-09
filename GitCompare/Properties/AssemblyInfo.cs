@@ -8,7 +8,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("GitCompare")]
+[assembly: AssemblyCopyright("Copyright 2016 Kevin Phelps")]
 [assembly: AssemblyTrademark("")]
+[assembly: AssemblyVersion("1.2.0.0")]
 
 // Setting ComVisible to false makes the types in this assembly not visible
 // to COM components.  If you need to access a type in this assembly from
