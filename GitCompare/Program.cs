@@ -103,7 +103,8 @@ namespace GitCompare
         {
             Console.WriteLine("Sorting...");
             IEnumerable<IGrouping<RepoStatusFlags, RepoInfo>> groups = repos
-                .OrderBy(repo => repo.Name)
+                .OrderBy(repo => repo.Branch)
+                .ThenBy(repo => repo.Name)
                 .GroupBy(repo => repo.Status)
                 .OrderByDescending(group => group.Key)
                 .ToList();
@@ -113,13 +114,16 @@ namespace GitCompare
 
         private static void OutputRepos(IEnumerable<IGrouping<RepoStatusFlags, RepoInfo>> groups)
         {
+            int maxLen = groups.SelectMany(grp => grp).Max(repo => repo.Name.Length);
+
             foreach (IGrouping<RepoStatusFlags, RepoInfo> group in groups)
             {
                 Console.WriteLine(group.Key.ToStatusString());
 
                 foreach (RepoInfo repo in group)
                 {
-                    Console.WriteLine($"   {repo.Name}");
+                    string spaces = new string(' ', maxLen - repo.Name.Length + 5);
+                    Console.WriteLine($"   {repo.Name}{spaces}{repo.Branch}");
                 }
 
                 Console.WriteLine();

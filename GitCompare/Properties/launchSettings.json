@@ -2,7 +2,7 @@
   "profiles": {
     "GitCompare": {
       "commandName": "Project",
-      "commandLineArgs": "C:\\GitHub\\"
+      "commandLineArgs": "C:\\Builds\\GitHub\\"
     }
   }
 }
