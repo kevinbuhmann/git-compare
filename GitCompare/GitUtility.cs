@@ -23,7 +23,9 @@ namespace GitCompare
                 {
                     subFolders = Directory.GetDirectories(folder);
                 }
-                catch { }
+                catch
+                {
+                }
 
                 if (subFolders.Any())
                 {
@@ -44,11 +46,11 @@ namespace GitCompare
                 .Trim();
         }
 
-        public static RepoStatusFlags GetRepoStatus(string repoFolder)
+        public static RepoStatus GetRepoStatus(string repoFolder)
         {
             string status = ExecuteGitCommand(repoFolder, "status");
             bool hasUncommittedChanges = status.Contains("nothing to commit") == false;
-            
+
             ExecuteGitCommand(repoFolder, "fetch");
             string branch = GetCurrentBranch(repoFolder);
 
@@ -58,21 +60,21 @@ namespace GitCompare
             string outgoingLog = ExecuteGitCommand(repoFolder, $"log origin/{branch}..").Trim();
             bool hasOutgoingChanges = string.IsNullOrEmpty(outgoingLog) == false;
 
-            RepoStatusFlags repoStatus = RepoStatusFlags.CleanAndUpToDate;
+            RepoStatus repoStatus = RepoStatus.CleanAndUpToDate;
 
             if (hasUncommittedChanges)
             {
-                repoStatus |= RepoStatusFlags.UncommittedChanges;
+                repoStatus |= RepoStatus.UncommittedChanges;
             }
 
             if (hasIncomingChanges)
             {
-                repoStatus |= RepoStatusFlags.IncomingChanges;
+                repoStatus |= RepoStatus.IncomingChanges;
             }
 
             if (hasOutgoingChanges)
             {
-                repoStatus |= RepoStatusFlags.OutgoingChanges;
+                repoStatus |= RepoStatus.OutgoingChanges;
             }
 
             return repoStatus;
@@ -85,21 +87,25 @@ namespace GitCompare
 
         private static string ExecuteGitCommand(string repoFolder, string arguments)
         {
-            Process gitProcess = new Process();
-            gitProcess.StartInfo = new ProcessStartInfo()
+            string output = null;
+
+            using (Process gitProcess = new Process())
             {
-                UseShellExecute = false,
-                RedirectStandardOutput = true,
-                RedirectStandardError = true,
+                gitProcess.StartInfo = new ProcessStartInfo()
+                {
+                    UseShellExecute = false,
+                    RedirectStandardOutput = true,
+                    RedirectStandardError = true,
 
-                WorkingDirectory = repoFolder,
-                FileName = "git",
-                Arguments = arguments
-            };
+                    WorkingDirectory = repoFolder,
+                    FileName = "git",
+                    Arguments = arguments
+                };
 
-            gitProcess.Start();
-            string output = gitProcess.StandardOutput.ReadToEnd();
-            gitProcess.WaitForExit();
+                gitProcess.Start();
+                output = gitProcess.StandardOutput.ReadToEnd();
+                gitProcess.WaitForExit();
+            }
 
             return output;
         }

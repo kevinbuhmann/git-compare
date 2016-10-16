@@ -18,7 +18,7 @@ namespace GitCompare
             return uppercaseLetter.Replace(str, match => $" {match.Value.ToLower()}").Trim();
         }
 
-        public static string ToStatusString(this RepoStatusFlags value)
+        public static string ToStatusString(this RepoStatus value)
         {
             string[] splitAndLowered = value.ToString()
                 .Split(new string[] { ", " }, StringSplitOptions.RemoveEmptyEntries)

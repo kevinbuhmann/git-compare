@@ -2,7 +2,7 @@
 {
     public class RepoInfo
     {
-        private RepoInfo(string repoFolder, string name, string branch, RepoStatusFlags status)
+        private RepoInfo(string repoFolder, string name, string branch, RepoStatus status)
         {
             this.RepoFolder = repoFolder;
             this.Name = name;
@@ -16,12 +16,12 @@
 
         public string Branch { get; }
 
-        public RepoStatusFlags Status { get; }
+        public RepoStatus Status { get; }
 
         public static RepoInfo FromGitRepo(string repoFolder, string name)
         {
             string branch = GitUtility.GetCurrentBranch(repoFolder);
-            RepoStatusFlags status = GitUtility.GetRepoStatus(repoFolder);
+            RepoStatus status = GitUtility.GetRepoStatus(repoFolder);
 
             return new RepoInfo(repoFolder, name, branch, status);
         }

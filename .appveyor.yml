@@ -1,0 +1,19 @@
+version: 1.4.{build}
+clone_folder: C:\projects\kevinphelps\git-compare
+clone_script:
+- git clone -q --depth=1 https://github.com/vintage-software/vstack.git C:\projects\vintage-software\vstack
+- git clone -q --depth=1 --branch=%APPVEYOR_REPO_BRANCH% https://github.com/kevinphelps/git-compare.git C:\projects\kevinphelps\git-compare
+before_build:
+- nuget restore C:\projects\kevinphelps\git-compare\GitCompare.sln
+build:
+  verbosity: minimal
+artifacts:
+- path: GitCompare\bin\Release\GitCompare.exe
+  name: GitCompare
+deploy:
+- provider: GitHub
+  auth_token:
+    secure: 6VCq6CyuBTcOI2AqzYwHAQXyrMg7CAETuLsGvfiSGQu8QXdjdO5Lu5l2wbF1lQ24
+  artifact: GitCompare
+  on:
+    appveyor_repo_tag: true

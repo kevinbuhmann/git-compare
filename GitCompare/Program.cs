@@ -9,7 +9,7 @@ namespace GitCompare
 {
     public static class Program
     {
-        public static string ApplicationName = "Git Compare";
+        public const string ApplicationName = "Git Compare";
 
         public static void Main(string[] args)
         {
@@ -33,7 +33,7 @@ namespace GitCompare
 
                     IEnumerable<string> repoFolders = FindRepos(directory);
                     IEnumerable<RepoInfo> repos = CompareReps(directory, repoFolders);
-                    IEnumerable<IGrouping<RepoStatusFlags, RepoInfo>> groups = SortRepos(repos);
+                    IEnumerable<IGrouping<RepoStatus, RepoInfo>> groups = SortRepos(repos);
                     OutputRepos(groups);
 
                     if (Console.Title == ApplicationName)
@@ -41,7 +41,8 @@ namespace GitCompare
                         Console.Write("Press enter to run again or any other key to exit...");
                         key = Console.ReadKey().Key;
                     }
-                } while (Console.Title == ApplicationName && key == ConsoleKey.Enter);
+                }
+                while (Console.Title == ApplicationName && key == ConsoleKey.Enter);
             }
         }
 
@@ -64,7 +65,7 @@ namespace GitCompare
                 Console.WriteLine("ERROR: Multiple arguments passed. Specify one argument which is the directory in which to find git repos; otherwise no arguments to use the current working directory.");
                 directory = null;
             }
-            
+
             directory = directory == null || directory.EndsWith(@"\") ? directory : $@"{directory}\";
 
             return directory;
@@ -99,10 +100,10 @@ namespace GitCompare
             return repos;
         }
 
-        private static IEnumerable<IGrouping<RepoStatusFlags, RepoInfo>> SortRepos(IEnumerable<RepoInfo> repos)
+        private static IEnumerable<IGrouping<RepoStatus, RepoInfo>> SortRepos(IEnumerable<RepoInfo> repos)
         {
             Console.WriteLine("Sorting...");
-            IEnumerable<IGrouping<RepoStatusFlags, RepoInfo>> groups = repos
+            IEnumerable<IGrouping<RepoStatus, RepoInfo>> groups = repos
                 .OrderBy(repo => repo.Branch)
                 .ThenBy(repo => repo.Name)
                 .GroupBy(repo => repo.Status)
@@ -112,11 +113,11 @@ namespace GitCompare
             return groups;
         }
 
-        private static void OutputRepos(IEnumerable<IGrouping<RepoStatusFlags, RepoInfo>> groups)
+        private static void OutputRepos(IEnumerable<IGrouping<RepoStatus, RepoInfo>> groups)
         {
             int maxLen = groups.SelectMany(grp => grp).Max(repo => repo.Name.Length);
 
-            foreach (IGrouping<RepoStatusFlags, RepoInfo> group in groups)
+            foreach (IGrouping<RepoStatus, RepoInfo> group in groups)
             {
                 Console.WriteLine(group.Key.ToStatusString());
 
