@@ -80,7 +80,7 @@ namespace GitCompare
             return repoStatus;
         }
 
-        private static bool IsGitRepo(string folder)
+        public static bool IsGitRepo(string folder)
         {
             return Directory.Exists(Path.Combine(folder, ".git"));
         }
